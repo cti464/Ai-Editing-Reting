@@ -12,6 +12,8 @@ export default function Dashboard() {
   const [result, setResult] = useState<VideoAnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dailyAnalyses, setDailyAnalyses] = useState(0);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -75,6 +77,34 @@ export default function Dashboard() {
     }
   };
 
+  const handleShare = async () => {
+    const text = `I just analyzed my video and got a Viral Score of ${result?.viralPrediction}% on Ai Editing Reting! Try it out here: ${window.location.origin}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Ai Editing Reting',
+          text: text,
+          url: window.location.origin,
+        });
+      } catch (err) {
+        // Fallback copying to clipboard if share dialog is cancelled or fails
+        try {
+          await navigator.clipboard.writeText(text);
+          setToastMsg("Score and link copied to clipboard!");
+          setShowToast(true);
+          setTimeout(() => setShowToast(false), 3000);
+        } catch (e) {}
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(text);
+        setToastMsg("Score and link copied to clipboard!");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+      } catch (e) {}
+    }
+  };
+
   const ScoreCircle = ({ score, label, color = "from-purple-500 to-blue-500" }: { score: number, label: string, color?: string }) => {
     const circumference = 2 * Math.PI * 45;
     const strokeDashoffset = circumference - (score / 100) * circumference;
@@ -114,6 +144,19 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 20, x: "-50%" }}
+            className="fixed bottom-safe-offset-10 bottom-24 left-1/2 z-50 px-6 py-3 rounded-full bg-brand-purple text-white font-medium shadow-[0_0_20px_rgba(168,85,247,0.4)] whitespace-nowrap"
+          >
+            {toastMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {!result && !isAnalyzing && (
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
@@ -214,7 +257,7 @@ export default function Dashboard() {
                     <button onClick={() => { setResult(null); setFile(null); }} className="flex-1 py-3 px-4 rounded-xl border border-white/10 hover:bg-white/5 font-medium transition-colors">
                       Upload New
                     </button>
-                    <button className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-brand-purple to-brand-blue font-bold shadow-lg hover:opacity-90 flex items-center justify-center gap-2">
+                    <button onClick={handleShare} className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-brand-purple to-brand-blue font-bold shadow-lg hover:opacity-90 flex items-center justify-center gap-2">
                        <Upload className="w-4 h-4" /> Share
                     </button>
                  </div>
