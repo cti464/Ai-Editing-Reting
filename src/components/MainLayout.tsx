@@ -159,9 +159,12 @@ export default function MainLayout() {
 
       <footer className="border-t border-white/10 py-12 bg-black/40 backdrop-blur-lg mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-4">
-          <div className="flex items-center justify-center space-x-2 text-center">
-            <PlaySquare className="w-6 h-6 text-brand-purple" />
-            <span className="font-bold text-lg text-white">Ai Editing Reting</span>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <div className="flex items-center justify-center space-x-2 text-center">
+              <PlaySquare className="w-6 h-6 text-brand-purple" />
+              <span className="font-bold text-lg text-white">Ai Editing Reting</span>
+            </div>
+            <p className="text-gray-400 italic text-sm text-center">Cut to inspire</p>
           </div>
           <p className="text-gray-500 text-sm text-center">
             © 2026 Ai Editing Reting. Analyzing videos locally. No data leaves your browser.
