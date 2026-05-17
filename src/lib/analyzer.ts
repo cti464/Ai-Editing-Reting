@@ -144,12 +144,12 @@ export async function analyzeVideoLocal(file: File, onProgress: (p: number) => v
           const motionIntensity = framesSampled > 0 ? totalMotion / framesSampled : 0;
           
           // Generate AI-like heuristic scores
-          const editingScore = Math.min(100, 40 + (cutsDetected * 2) + (motionIntensity * 100));
+          let editingScore = Math.min(100, 40 + (cutsDetected * 2) + (motionIntensity * 100));
           let hookScore = Math.min(100, 30 + (hookMotion * 150));
           
           if (!hasAudio) audioScore = 15;
-          if (avgBrightness < 40) editingScore - 10;
-          if (avgBrightness > 220) editingScore - 10;
+          if (avgBrightness < 40) editingScore -= 10;
+          if (avgBrightness > 220) editingScore -= 10;
 
           // Viral probability
           const viralPrediction = Math.round((editingScore * 0.4) + (hookScore * 0.4) + (audioScore * 0.2));

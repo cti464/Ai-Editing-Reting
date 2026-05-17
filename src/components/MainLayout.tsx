@@ -12,7 +12,7 @@ export default function MainLayout() {
   const links = [
     { name: "Home", path: "/", icon: PlaySquare },
     { name: "Dashboard", path: "/dashboard", icon: BarChart2 },
-    { name: "Ai Tools", path: "/aitools", icon: Wand2 },
+    { name: "Ai Tools", path: "#", onClick: () => handleSoon("AI Tools feature is Coming Soon!"), icon: Wand2 },
   ];
 
   const handleSoon = (msg: string) => {
@@ -37,8 +37,17 @@ export default function MainLayout() {
 
             <nav className="hidden md:flex space-x-8">
               {links.map((link) => {
-                const isActive = location.pathname === link.path;
-                return (
+                const isActive = location.pathname === link.path && link.path !== "#";
+                return link.onClick ? (
+                  <button
+                    key={link.name}
+                    onClick={link.onClick}
+                    className={`flex items-center space-x-1.5 text-sm font-medium transition-colors text-gray-400 hover:text-white`}
+                  >
+                    <link.icon className="w-4 h-4" />
+                    <span>{link.name}</span>
+                  </button>
+                ) : (
                   <Link
                     key={link.name}
                     to={link.path}
@@ -87,17 +96,28 @@ export default function MainLayout() {
               className="md:hidden absolute top-16 left-0 right-0 overflow-hidden bg-[#09090b]/95 backdrop-blur-xl border-b border-white/10 shadow-2xl"
             >
               <div className="px-4 pt-2 pb-6 space-y-2">
-                {links.map((link) => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center space-x-2 w-full p-4 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white font-medium"
-                  >
-                    <link.icon className="w-5 h-5" />
-                    <span className="text-lg">{link.name}</span>
-                  </Link>
-                ))}
+                {links.map((link) => 
+                  link.onClick ? (
+                    <button
+                      key={link.name}
+                      onClick={() => { link.onClick!(); setIsOpen(false); }}
+                      className="flex items-center space-x-2 w-full p-4 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white font-medium text-left"
+                    >
+                      <link.icon className="w-5 h-5" />
+                      <span className="text-lg">{link.name}</span>
+                    </button>
+                  ) : (
+                    <Link
+                      key={link.name}
+                      to={link.path}
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center space-x-2 w-full p-4 rounded-xl hover:bg-white/5 text-gray-300 hover:text-white font-medium text-left"
+                    >
+                      <link.icon className="w-5 h-5" />
+                      <span className="text-lg">{link.name}</span>
+                    </Link>
+                  )
+                )}
                 <div className="pt-4 mt-2 border-t border-white/10 flex flex-col gap-3">
                   <Link 
                     to="/pro"

@@ -40,7 +40,7 @@ export default function Dashboard() {
     };
   }, [videoUrl]);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: any) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       if (dailyAnalyses >= 3) {
