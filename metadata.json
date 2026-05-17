@@ -1,0 +1,8 @@
+{
+  "name": "Ai Editing Reting",
+  "description": "Local browser-based AI video rating and analysis without external APIs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
